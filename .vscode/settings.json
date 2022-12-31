@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "layer.h": "c",
+        "backprop.h": "c"
+    }
+}
