@@ -10,9 +10,12 @@ float a=0.15;
 float **input;
 float *cost;
 float total_cost;
-float **outputs;
-int n_train;
+int n_train=4;
 int n=1;
+float **outputs;
+char mot[50];
+
+
 
 int main(void)
 {
@@ -40,8 +43,7 @@ int main(void)
     }
 
 
-    printf("Entrez le nombre d'exemples d'apprentissage: \n");
-    scanf("%d",&n_train);
+    printf("le nombre d'exemples d'apprentissage: [%d]\n",n_train);
     printf("\n");
 
     input = (float**) malloc(n_train * sizeof(float*));
@@ -49,7 +51,7 @@ int main(void)
     {
         input[i] = (float*)malloc(n_neurons[0] * sizeof(float));
     }
-
+    
     outputs = (float**) malloc(n_train* sizeof(float*));
     for(i=0;i<n_train;i++)
     {
@@ -61,6 +63,7 @@ int main(void)
 
     // appel à la fonction get_inputs
     get_inputs();
+    
     // appel à la fonction get_outputs
     get_outputs();
     train_neural_net();
@@ -91,41 +94,57 @@ int init()
 void  get_inputs()
 {
     int i,j;
-
-        for(i=0;i<n_train;i++)
-        {
-            printf("Donnez les entrées pour l'exemple d'apprentissage[%d]:\n",i);
-
-            for(j=0;j<n_neurons[0];j++)
-            {
-                scanf("%f",&input[i][j]);
-                
-            }
-            printf("\n");
-        }
+    float input[4][2]={0,0,0,1,1,0,1,1};
 }
 
 //Get ouputs
 void get_outputs()
 {
-    int i,j;
-    
+    char mot[50];
+     int i,j,n;
+    while(strcmp(mot,"AND") != 0 && strcmp(mot,"OR") != 0){
+    printf("Veuillez choisir la porte logique souhaitée :");
+    printf("\n");
+    printf("tapez AND ou OR");
+    printf("\n");
+    scanf("%s", mot);
+    if (strcmp(mot,"AND") == 0)
+    {
+    float tab[]={0,0,0,1};
     for(i=0;i<n_train;i++)
     {
         for(j=0;j<n_neurons[n_layers-1];j++)
         {
-            printf("Donnez la sortie desiree pour l'exemple d'apprentissage[%d]: \n",i);
-            scanf("%f",&outputs[i][j]);
+            //scanf("%f",&outputs[i][j]);
+            outputs[i][j]=tab[n];
             printf("\n");
+            n++;
         }
     }
+    }
+    else if (strcmp(mot,"OR") == 0)
+    {
+    float tab[]={0,1,1,1};
+    for(i=0;i<n_train;i++)
+    {
+        for(j=0;j<n_neurons[n_layers-1];j++)
+        {
+            //scanf("%f",&outputs[i][j]);
+            outputs[i][j]=tab[n];
+            printf("\n");
+            n++;
+        }
+    }
+    }
+    }
+    
 }
 
 // ajouter les inputs à la couche d'entrée
 void add_input(int i)
 {
     int j;
-
+float input[4][2]={0,0,0,1,1,0,1,1};
     for(j=0;j<n_neurons[0];j++)
     {
         lay[0].neu[j].actv = input[i][j];
@@ -300,6 +319,7 @@ void calculer_loss(int i)
     float tmpcost=0;
     float tcost=0;
 
+
     for(j=0;j<n_neurons[n_layers-1];j++)
     {
         tmpcost = outputs[i][j] - lay[n_layers-1].neu[j].actv;
@@ -315,6 +335,7 @@ void calculer_loss(int i)
 void back_prop(int p)
 {
     int i,j,k;
+    
 
     // la couche de retour
     for(j=0;j<n_neurons[n_layers-1];j++)
