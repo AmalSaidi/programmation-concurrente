@@ -12,6 +12,5 @@ layer.o: layer.c
 neuron.o: neuron.c
 	$(CC) $(CFLAGS) -c neuron.c
 
-# remove object files and executable when user executes "make clean"
 clean:
 	rm *.o backprop
